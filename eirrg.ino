@@ -38,14 +38,80 @@ void setup() {
 }
 
 void loop() {
-  
+  baca_kiri();
+  baca_tengah();
+  baca_kanan();
+  if (distance1 < 10 && distance2 < 10 && distance3 < 10) {
+    stop();
+    if (digitalRead(pir) == HIGH) {
+      gripper();
+    }
+    else putarbalik();
+  }
+  else if (distance1 > 10 && distance2 < 10 && distance3 < 10) {
+    kiri();
+  }
+  else if (distance1 < 10 && distance2 > 10 && distance3 < 10) {
+    maju();
+  }
+  else if (distance1 < 10 && distance2 < 10 && distance3 > 10) {
+    kanan();
+  }
+  else if (distance1 > 10 && distance2 < 10 && distance3 > 10) {
+    kiri();
+  }
 }
 
-void baca_ultrasonic() {
+void baca_kiri() {
   digitalWrite(trig1, LOW);
   delayMicroseconds(2);
   digitalWrite(trig1, HIGH);
   delayMicroseconds(20);
   digitalWrite(trig1, LOW);
-  
+  duration1 = pulseIn(echo1, HIGH);
+  distance1 = (duration1 * 0.034)/2;
+}
+
+void baca_tengah() {
+  digitalWrite(trig2, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig2, HIGH);
+  delayMicroseconds(20);
+  digitalWrite(trig2, LOW);
+  duration2 = pulseIn(echo2, HIGH);
+  distance2 = (duration2 * 0.034)/2;
+}
+
+void baca_kanan() {
+  digitalWrite(trig3, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trig3, HIGH);
+  delayMicroseconds(20);
+  digitalWrite(trig3, LOW);
+  duration3 = pulseIn(echo3, HIGH);
+  distance3 = (duration3 * 0.034)/2;
+}
+
+void maju() {
+  //aksi maju
+}
+
+void kanan() {
+  //aksi ke kanan
+}
+
+void kiri() {
+  //aksi ke kiri
+}
+
+void stop() {
+  //aksi berhenti
+}
+
+void gripper() {
+  //aksi gripper
+}
+
+void putarbalik() {
+  //aksi robot putar balik
 }
