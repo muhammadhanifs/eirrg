@@ -1,14 +1,21 @@
 #include <Servo.h>
 
-#define trig1 2
-#define echo1 3
-#define trig2 4
-#define echo2 5
-#define trig3 6
-#define echo3 7
-#define pir 8
-#define servo1 9
-#define servo2 10
+#define trig1 1
+#define echo1 2
+#define trig2 3
+#define echo2 4
+#define trig3 5
+#define echo3 6
+#define pir 7
+#define servo1 8
+#define servo2 9
+#define in1 10   //kiri
+#define in2 11   //kiri
+#define in3 12   //kanan
+#define in4 13   //kanan
+
+const int en12 = A0;
+const int en34 = A1;
 
 int duration1;
 int duration2;
@@ -16,6 +23,7 @@ int duration3;
 int distance1;
 int distance2;
 int distance3;
+int pos = 0;
 
 /*Keterangan : 
   pin-pin diatas tidak mutlak, akan
@@ -35,6 +43,7 @@ void setup() {
   pinMode(pir, INPUT);
   servo_side.attach(servo1);
   servo_rotate.attach(servo2);
+  servo_rotate.write(pos);
 }
 
 void loop() {
@@ -43,6 +52,7 @@ void loop() {
   baca_kanan();
   if (distance1 < 10 && distance2 < 10 && distance3 < 10) {
     stop();
+    off();
     if (digitalRead(pir) == HIGH) {
       gripper();
     }
@@ -94,24 +104,58 @@ void baca_kanan() {
 
 void maju() {
   //aksi maju
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(en12, 255);
+  analogWrite(en34, 255);
 }
 
 void kanan() {
   //aksi ke kanan
+  digitalWrite(in1, HIGH);
+  digitalWrite(in2, LOW);
+  digitalWrite(in3, LOW);
+  digitalWrite(in4, HIGH);
+  analogWrite(en12, 255);
+  analogWrite(en34, 255);
 }
 
 void kiri() {
   //aksi ke kiri
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(en12, 255);
+  analogWrite(en34, 255);
 }
 
 void stop() {
   //aksi berhenti
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, HIGH);
+  digitalWrite(in3, HIGH);
+  digitalWrite(in4, LOW);
+  analogWrite(en12, 0);
+  analogWrite(en34, 0);
+}
+
+void off() {
+  digitalWrite(trig1, LOW);
+  digitalWrite(trig2, LOW);
+  digitalWrite(trig3, LOW);
 }
 
 void gripper() {
-  //aksi gripper
+  for (pos = 0; pos <= 45; pos++) {
+    servo_rotate.write(pos);
+  }
+  putarbalik();
 }
 
 void putarbalik() {
-  //aksi robot putar balik
+  off();
+  kiri();
 }
