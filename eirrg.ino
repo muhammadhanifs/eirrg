@@ -14,8 +14,8 @@
 #define in3 12   //kanan
 #define in4 13   //kanan
 
-const int en12 = A0;
-const int en34 = A1;
+const int en12 = A0;  //kiri
+const int en34 = A1;  //kanan
 
 int duration1;
 int duration2;
@@ -47,12 +47,9 @@ void setup() {
 }
 
 void loop() {
-  baca_kiri();
-  baca_tengah();
-  baca_kanan();
   if (distance1 < 10 && distance2 < 10 && distance3 < 10) {
     stop();
-    off();
+    ultrasonic_off();
     if (digitalRead(pir) == HIGH) {
       gripper();
     }
@@ -70,6 +67,12 @@ void loop() {
   else if (distance1 > 10 && distance2 < 10 && distance3 > 10) {
     kiri();
   }
+}
+
+void ultrasonic_on() {
+  baca_kiri();
+  baca_tengah();
+  baca_kanan();
 }
 
 void baca_kiri() {
@@ -142,7 +145,7 @@ void stop() {
   analogWrite(en34, 0);
 }
 
-void off() {
+void ultrasonic_off() {
   digitalWrite(trig1, LOW);
   digitalWrite(trig2, LOW);
   digitalWrite(trig3, LOW);
