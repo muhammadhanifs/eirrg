@@ -27,7 +27,8 @@ int pos = 0;
 
 /*Keterangan : 
   pin-pin diatas tidak mutlak, akan
-  diubah jika ada perubahan */
+  diubah jika ada perubahan peletakan
+  pin masing-masing komponen */
 
 Servo servo_side;
 Servo servo_rotate;
@@ -47,13 +48,19 @@ void setup() {
 }
 
 void loop() {
+  ultrasonic_on();
   if (distance1 < 10 && distance2 < 10 && distance3 < 10) {
     stop();
+    delay(200);
     ultrasonic_off();
     if (digitalRead(pir) == HIGH) {
       gripper();
+      delay(1000);
+      putarbalik();
     }
-    else putarbalik();
+    else {
+      putarbalik();
+    }
   }
   else if (distance1 > 10 && distance2 < 10 && distance3 < 10) {
     kiri();
@@ -67,6 +74,7 @@ void loop() {
   else if (distance1 > 10 && distance2 < 10 && distance3 > 10) {
     kiri();
   }
+    delay(200);
 }
 
 void ultrasonic_on() {
@@ -152,13 +160,20 @@ void ultrasonic_off() {
 }
 
 void gripper() {
-  for (pos = 0; pos <= 45; pos++) {
-    servo_rotate.write(pos);
+  for (pos1 = 0; pos1 <= 45; posq++) {
+    servo_rotate.write(pos1);
+    delay(2);
   }
-  putarbalik();
+  for (pos2 = 0; pos2 <= 45; pos2++) {
+    servo_side.write(pos2);
+    delay(2);
+  }
 }
 
 void putarbalik() {
-  off();
+  ultrasonic_off();
+  delay(200);
   kiri();
+  delay(2000);
+  ultrasonic_on();
 }
